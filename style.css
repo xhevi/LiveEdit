@@ -1,0 +1,19 @@
+.custom-menu {
+  display: none;
+  z-index:1000;
+  position: absolute;
+  background-color:#EEE;
+  border: 1px solid #AAA;
+  overflow: hidden;
+  width: 120px;
+  white-space:nowrap;
+}
+
+.custom-menu li {
+  padding: 5px;
+  list-style-type: none;
+}
+
+.custom-menu li:hover {
+  background-color: #DDD;
+}
