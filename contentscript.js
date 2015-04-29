@@ -4,18 +4,22 @@ function duplicate(el) {
 }
 
 function rem(el) {
+  //console.log("DELETE: "+$(el).html());
   el.remove();
 }
 
 function handleRight(el) {
-    $("#cm li").click(function(){
+    $(".custom-menu li").click(function(){
       // This is the triggered action name
       switch($(this).attr("data-action")) {
         // A case for each action. Should personalize to your actions
         case "add": duplicate(el); break;
-        case "rem": rem(el); break;
-        }
+        case "rem": rem(el); console.log("call"); break;
+      }
+      $(".custom-menu").hide(100);
+      console.log("Data action:"+$(this).attr("data-action"));
       });
+     
 }
 
 // Function for inplace text editing
@@ -58,35 +62,31 @@ $(document).ready(function(){
       $("body").append("<ul class='custom-menu' id='cm'></ul>");
       $("#cm").append("<li data-action='add'>Duplicate</li>");
       $("#cm").append("<li data-action='rem'>Remove</li>");
+      $("#cm li").css('cursor','pointer');
 
       // Trigger action when the cm is about to be shown
     $(document).bind("contextmenu", function (event) {
       // Avoid the real one
       event.preventDefault();
+      handleRight(event.target);
       // Show cm with a fast effect
-      $(".custom-menu").toggle(100).
+      $(".custom-menu").finish().toggle(100).
       // In the right position (the mouse)
       css({
         top: event.pageY + "px",
         left: event.pageX + "px"
         });
       });
-
-    // If the document is clicked somewhere
-    $(document).bind("mousedown", function () {
-      $(".custom-menu").hide(100);
-    });
-
       
-      document.oncontextmenu = function() {return false;};
 
-      $(document).mousedown(function(e){ 
-        if( e.button == 2 ) { 
-          handleRight(e.target);
-          return false; 
-        } 
-        return true; 
-      }); 
+      // If the document is clicked somewhere
+      $(document).bind("mousedown", function (e) {
+          // If the clicked element is not the menu
+          if (!$(e.target).parents(".custom-menu").length > 0) {
+              // Hide it
+              $(".custom-menu").hide(100);
+          }
+      });
 
       $('html').dblclick(function(e) {
         e.preventDefault();
