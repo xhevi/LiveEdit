@@ -64,6 +64,11 @@ $(document).ready(function(){
       $("#cm").append("<li data-action='rem'>Remove</li>");
       $("#cm li").css('cursor','pointer');
 
+      // Disable links in edit mode
+      $('a').click(function(ev){ 
+        ev.preventDefault();
+      });
+
       // Trigger action when the cm is about to be shown
     $(document).bind("contextmenu", function (event) {
       // Avoid the real one
