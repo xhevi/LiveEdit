@@ -36,9 +36,10 @@ function textClicked(el) {
 
 // Just outline the element under mouse
 function reHover() {
-    $('*').hover(
+    $('*:not(#cm, #cm li)').hover(
         function(e){
-            $(this).css('border', '1px solid black');
+            $(this).parents().css("border", "none");
+            $(this).css('border', '2px solid #4d89e2');
             e.preventDefault();
             e.stopPropagation();
             return false;
