@@ -12,8 +12,15 @@
 .custom-menu li {
   padding: 5px;
   list-style-type: none;
+  cursor: pointer;
 }
 
 .custom-menu li:hover {
   background-color: #DDD;
 }
+
+.hovered {
+  border: 2px solid #4d89e2 !important;
+  box-shadow: 0 4px 4px 0 #f2f2f2 !important;
+}
+

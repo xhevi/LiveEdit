@@ -1,3 +1,5 @@
+
+
 function duplicate(el) {
   $(el).clone().attr('id', el.tagName+$.now()).insertAfter(el);
   reHover(); // apply hovering rules to appended elements
@@ -25,7 +27,7 @@ function handleRight(el) {
 // Function for inplace text editing
 function textClicked(el) {
     var content = el.innerHTML; //select's the contents of div immediately previous to the button
-    var editableText = $("<textarea />");
+    var editableText = $("<textarea></textarea>");
     editableText.val(content);
     $(el).hide();
     $(el).after(editableText);
@@ -42,13 +44,13 @@ function textClicked(el) {
 function reHover() {
     $('*:not(#cm, #cm li)').hover(
         function(e){
-            $(this).parents().css("border", "none");
-            $(this).css('border', '2px solid #4d89e2');
+            $(this).parents().removeClass("hovered");
+            $(this).addClass("hovered");
             e.preventDefault();
             e.stopPropagation();
             return false;
         },function(e){
-            $(this).css('border', 'none');
+            $(this).removeClass("hovered");
             e.preventDefault();
             e.stopPropagation();
             return false;
@@ -56,41 +58,49 @@ function reHover() {
     );
 }
 
-
 $(document).ready(function(){ 
+
+      if ($('#cm').length) return false; // Don't append again when button already clicked
 
       $("body").append("<ul class='custom-menu' id='cm'></ul>");
       $("#cm").append("<li data-action='add'>Duplicate</li>");
       $("#cm").append("<li data-action='rem'>Remove</li>");
-      $("#cm li").css('cursor','pointer');
+      $('a').css('cursor','text');
 
-      // Disable links in edit mode
-      $('a').click(function(ev){ 
-        ev.preventDefault();
-      });
+      // Disable change of page in edit mode
+      $('a').click(function(e){e.preventDefault();});
+      $('button').click(function(e){e.preventDefault();});
 
       // Trigger action when the cm is about to be shown
-    $(document).bind("contextmenu", function (event) {
+    $(document).bind("contextmenu", function (e) {
       // Avoid the real one
-      event.preventDefault();
-      handleRight(event.target);
+      e.preventDefault();
+
+      handleRight(e.target);
       // Show cm with a fast effect
       $(".custom-menu").finish().toggle(100).
       // In the right position (the mouse)
       css({
-        top: event.pageY + "px",
-        left: event.pageX + "px"
+        top: e.pageY + "px",
+        left: e.pageX + "px"
         });
       });
       
 
-      // If the document is clicked somewhere
+      // If the document is clicked somewhere else hide menu
       $(document).bind("mousedown", function (e) {
           // If the clicked element is not the menu
           if (!$(e.target).parents(".custom-menu").length > 0) {
               // Hide it
               $(".custom-menu").hide(100);
           }
+      });
+
+      // If pressed escape, hide menu
+      $(document).keyup(function(e) {
+          if (e.keyCode == 27) {
+            $(".custom-menu").hide(100);
+          }   // escape key maps to keycode `27`
       });
 
       $('html').dblclick(function(e) {
